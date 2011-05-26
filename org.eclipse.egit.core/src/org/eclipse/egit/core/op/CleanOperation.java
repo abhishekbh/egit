@@ -10,6 +10,7 @@ package org.eclipse.egit.core.op;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
@@ -26,9 +27,6 @@ import org.eclipse.jgit.api.CleanCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
-
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 /**
  * Clean operation cleans a repository or a selected list of resources
@@ -53,17 +51,6 @@ public class CleanOperation implements IEGitOperation {
 	public void execute(IProgressMonitor monitor) throws CoreException {
 		// TODO run clean command
 		discoverRepos();
-
-/* 		Display firstDisplay = new Display();
- 		Shell firstShell = new Shell(firstDisplay);
- 		firstShell.setText("First Example"); //$NON-NLS-1$
- 		firstShell.setSize(200,100);
- 		firstShell.open ();
- 		while (!firstShell.isDisposed()) {
- 		if (!firstDisplay.readAndDispatch())
- 			firstDisplay.sleep ();
- 		}*/
- 		//firstDisplay.dispose ();
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,17 +64,6 @@ public class CleanOperation implements IEGitOperation {
 		//String resRelPath = RepositoryMapping.getMapping(res).getRepoRelativePath(res);
 		CleanCommand clean = new Git(repository).clean();
 		clean.call();
-
- 		Display firstDisplay = new Display();
- 		Shell firstShell = new Shell(firstDisplay);
- 		firstShell.setText("First Example"); //$NON-NLS-1$
- 		firstShell.setSize(200,100);
- 		firstShell.open ();
- 		while (!firstShell.isDisposed()) {
- 		if (!firstDisplay.readAndDispatch())
- 			firstDisplay.sleep();
- 		}
- 		//firstDisplay.dispose ();
 	}
 
 	/**
@@ -103,6 +79,16 @@ public class CleanOperation implements IEGitOperation {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * @return Set
+	 */
+	public Set<String> dryRun() {
+		Repository repo = getRepository(resources[0]);
+		CleanCommand clean = new Git(repo).clean();
+
+		return clean.dryRun();
 	}
 
 	private static Repository getRepository(IResource resource) {
