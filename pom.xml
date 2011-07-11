@@ -21,10 +21,10 @@
 
   <groupId>org.eclipse.egit</groupId>
   <artifactId>egit-parent</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>EGit Parent (Incubation)</name>
+  <name>EGit Parent</name>
 
   <mailingLists>
     <mailingList>
@@ -62,14 +62,16 @@
   </licenses>
 
   <properties>
-    <egit-version>1.0.0-SNAPSHOT</egit-version>
+    <egit-version>1.1.0-SNAPSHOT</egit-version>
     <tycho-version>0.12.0</tycho-version>
     <mockito-version>1.8.4</mockito-version>
     <junit-version>4.8.1</junit-version>
     <jgit-site>file:/${basedir}/../../jgit/org.eclipse.jgit.packaging/org.eclipse.jgit.updatesite/target/site</jgit-site>
     <jetty-site>http://download.eclipse.org/jetty/7.1.6.v20100715/repository/</jetty-site>
     <wikitext-site>http://download.eclipse.org/tools/mylyn/update/weekly</wikitext-site>
-    <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/S20110124210048/repository</orbit-site>
+    <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
+    <signer-input-directory>/home/data/httpd/download-staging.priv/egit</signer-input-directory>
+    <download-publish-path>/home/data/httpd/download.eclipse.org/egit/updates-nightly</download-publish-path>
   </properties>
 
   <profiles>
@@ -150,6 +152,26 @@
 
     <module>org.eclipse.egit.source-feature</module>
    </modules>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>maven.eclipse.org</id>
+      <url>http://maven.eclipse.org/nexus/content/repositories/milestone-indigo</url>
+    </pluginRepository>
+    <!-- TODO: need 1.0.1.2-SNAPSHOT of the signing plugin until bugfix for
+         https://bugs.eclipse.org/bugs/show_bug.cgi?id=347591
+         is available in maven.eclipse.org -->
+    <pluginRepository>
+      <id>intalio-dash-signing-plugin</id>
+      <url>http://intalio.org/public/maven2</url>
+      <snapshots>
+       <enabled>true</enabled>
+      </snapshots>
+      <releases>
+       <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
 
   <repositories>
     <repository>
@@ -276,6 +298,19 @@
               </goals>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.2-beta-4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.eclipse.dash.maven</groupId>
+          <artifactId>eclipse-maven-signing-plugin</artifactId>
+          <!-- TODO: need 1.0.1.2-SNAPSHOT of the signing plugin until bugfix for
+               https://bugs.eclipse.org/bugs/show_bug.cgi?id=347591
+               is available in maven.eclipse.org -->
+          <version>1.0.1.2-SNAPSHOT</version>
         </plugin>
       </plugins>
     </pluginManagement>
